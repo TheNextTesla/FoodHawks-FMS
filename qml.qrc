@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>SwapView.qml</file>
+        <file>HomeScreen.qml</file>
+        <file>AddItemScreen.qml</file>
     </qresource>
 </RCC>

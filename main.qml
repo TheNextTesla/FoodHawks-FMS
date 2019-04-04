@@ -3,38 +3,26 @@ import QtQuick.Window 2.10
 import QtQuick.VirtualKeyboard 2.3
 
 Window {
-    id: window
+    id: windowMain
     visible: true
-    width: 640
+    width: 800
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("FoodManagementSystem")
 
-    InputPanel {
-        id: inputPanel
-        z: 99
+    Rectangle {
+        id: rectangle
+        x: 716
+        y: 0
+        width: 85
+        height: 480
+        color: "#b0eb98"
+    }
+
+    SwapView {
+        id: swapView
         x: 0
-        y: window.height
-        width: window.width
-
-        states: State {
-            name: "visible"
-            when: inputPanel.active
-            PropertyChanges {
-                target: inputPanel
-                y: window.height - inputPanel.height
-            }
-        }
-        transitions: Transition {
-            from: ""
-            to: "visible"
-            reversible: true
-            ParallelAnimation {
-                NumberAnimation {
-                    properties: "y"
-                    duration: 250
-                    easing.type: Easing.InOutQuad
-                }
-            }
-        }
+        y: 0
+        width: 715
+        height: 480
     }
 }
