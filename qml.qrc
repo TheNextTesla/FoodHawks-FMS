@@ -4,5 +4,7 @@
         <file>SwapView.qml</file>
         <file>HomeScreen.qml</file>
         <file>AddItemScreen.qml</file>
+        <file>TextField.qml</file>
+        <file>TextBase.qml</file>
     </qresource>
 </RCC>
