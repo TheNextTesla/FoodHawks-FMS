@@ -35,20 +35,21 @@ Item {
         width: 318
         height: 61
         enterKeyAction: EnterKeyAction.Next
-        previewText: "Item Name"
+        previewText: "Purchase Date"
+        inputMethodHints: Qt.ImhFormattedNumbersOnly
+        onEnterKeyClicked: digitsField.focus = true
     }
 
-    TextField {
+    Text {
         id: elementDateOfPurchase
         x: 56
         y: 88
         width: 246
         height: 24
         text: qsTr("Date of Purchase")
-        previewText: "Formatted number field"
-        inputMethodHints: Qt.ImhFormattedNumbersOnly
-        enterKeyAction: EnterKeyAction.Next
-        onEnterKeyClicked: digitsField.focus = true
+        verticalAlignment: Text.AlignVCenter
+        font.pixelSize: 12
+        horizontalAlignment: Text.AlignHCenter
     }
 
     Text {
