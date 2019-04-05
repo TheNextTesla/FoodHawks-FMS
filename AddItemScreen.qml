@@ -24,8 +24,8 @@ Item {
         width: 318
         height: 61
         previewText: "Item Name"
-        enterKeyAction: EnterKeyAction.Next
-        onEnterKeyClicked: passwordField.focus = true
+        //enterKeyAction: TODO: Add Enter Key Action
+        onEnterKeyClicked: textFieldFoodName.focus = true
     }
 
     TextField {
@@ -34,10 +34,10 @@ Item {
         y: 118
         width: 318
         height: 61
-        enterKeyAction: EnterKeyAction.Next
+        //enterKeyAction: TODO: Add Enter Key Action
         previewText: "Purchase Date"
         inputMethodHints: Qt.ImhFormattedNumbersOnly
-        onEnterKeyClicked: digitsField.focus = true
+        onEnterKeyClicked: textFieldPurchaseDate.focus = true
     }
 
     Text {

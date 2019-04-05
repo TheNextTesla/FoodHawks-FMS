@@ -6,5 +6,6 @@
         <file>AddItemScreen.qml</file>
         <file>TextField.qml</file>
         <file>TextBase.qml</file>
+        <file>MainView.qml</file>
     </qresource>
 </RCC>
