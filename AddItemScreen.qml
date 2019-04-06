@@ -1,4 +1,6 @@
-import QtQuick 2.0
+import QtQuick 2.10
+import QtQuick.VirtualKeyboard 2.3
+import QtQuick.Controls 1.4
 
 Item {
     width: 715
@@ -17,7 +19,7 @@ Item {
         font.pixelSize: 28
     }
 
-    TextField {
+    TextKeyField {
         id: textFieldFoodName
         x: 369
         y: 118
@@ -28,7 +30,7 @@ Item {
         onEnterKeyClicked: textFieldFoodName.focus = true
     }
 
-    TextField {
+    TextKeyField {
         id: textFieldPurchaseDate
         x: 20
         y: 118
