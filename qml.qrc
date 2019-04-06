@@ -7,5 +7,6 @@
         <file>TextKeyField.qml</file>
         <file>TextBase.qml</file>
         <file>MainView.qml</file>
+        <file>RemoveItemScreen.qml</file>
     </qresource>
 </RCC>
