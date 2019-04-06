@@ -8,5 +8,6 @@
         <file>TextBase.qml</file>
         <file>MainView.qml</file>
         <file>RemoveItemScreen.qml</file>
+        <file>StatisticsScreen.qml</file>
     </qresource>
 </RCC>

@@ -48,6 +48,7 @@ Item {
             height: 65
             text: "\u2139"
             font.pointSize: 32
+            onClicked: swapView.currentIndex = 3
         }
 
         RoundButton {
@@ -74,5 +75,6 @@ Item {
         HomeScreen {}
         AddItemScreen {}
         RemoveItemScreen {}
+        StatisticsScreen {}
     }
 }
