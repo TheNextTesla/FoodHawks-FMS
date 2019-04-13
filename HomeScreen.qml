@@ -48,26 +48,6 @@ Item {
         model: ListModel {
             id: homeListModel
         }
-        Connections {
-            target: mainView
-            onRefreshAll: {
-                console.debug("Updating HomeListModel")
-                homeListModel.clear()
-
-                var food_colors = foodList.getFoodItemColors()
-                var food_names = foodList.getFoodItemNames()
-                var index = 0
-
-                for (index = 0; index < food_names.length; index++) {
-                    if(index < food_colors.length) {
-                        homeListModel.append({"name":food_names[index], "colorCode":food_colors[index]})
-                    }
-                    else {
-                        homeListModel.append({"name":food_names[index], "colorCode":"blue"})
-                    }
-                }
-            }
-        }
     }
 
     Rectangle {
@@ -138,6 +118,27 @@ Item {
             verticalAlignment: Text.AlignVCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             font.pixelSize: 19
+        }
+    }
+
+    Connections {
+        target: mainView
+        onRefreshAll: {
+            console.debug("Updating HomeListModel")
+            homeListModel.clear()
+
+            var food_colors = foodList.getFoodItemColors()
+            var food_names = foodList.getFoodItemNames()
+            var index = 0
+
+            for (index = 0; index < food_names.length; index++) {
+                if(index < food_colors.length) {
+                    homeListModel.append({"name":food_names[index], "colorCode":food_colors[index]})
+                }
+                else {
+                    homeListModel.append({"name":food_names[index], "colorCode":"blue"})
+                }
+            }
         }
     }
 }
