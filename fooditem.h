@@ -1,28 +1,18 @@
 #ifndef FOODITEM_H
 #define FOODITEM_H
 
-#include <QObject>
-#include <chrono>
+#include <string>
 
-class FoodItem : public QObject
+class FoodItem
 {
-    Q_OBJECT
-public:
-    explicit FoodItem(QObject *parent = nullptr);
-
-
-
-signals:
-
-
-public slots:
-
-
 public:
     std::string food_name;
     std::string upc;
-    std::time_t time;
+    std::string time;
 
+public:
+    FoodItem();
+    FoodItem(const std::string & food_name, const std::string & upc, const std::string time);
 };
 
 #endif // FOODITEM_H

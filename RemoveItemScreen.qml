@@ -8,6 +8,45 @@ Item {
     width: 715
     height: 480
 
+    function updateRemovalList() {
+        removeListModel.clear()
+        var itemsContaining = foodList.getFoodItemsContaining(textFieldFoodNameSearch.text)
+        var index = 0;
+        console.debug("Enter Pressed")
+        for (index = 0; index < itemsContaining.length; index++) {
+            removeListModel.append({"name":itemsContaining[index]})
+            console.debug(itemsContaining[index])
+        }
+    }
+
+    function removeItem() {
+        if(listView.currentIndex != -1) {
+            var foodDateString = foodList.getFoodItemsContaining(textFieldFoodNameSearch.text)[listView.currentIndex]
+            console.debug("Removing " + foodDateString)
+            var split = foodDateString.split(" | ")
+            var split_length = split.length
+
+            if(split_length === 2) {
+                foodList.removeItem(split[0], split[1], sliderFoodRating.value)
+            }
+            else if(split_length > 2) {
+                var temp_index = 0
+                var temp_str = split[0]
+                for(temp_index = 1; temp_index < split_length - 2; temp_index++) {
+                    temp_str += " | " + split[temp_index]
+                }
+                foodList.removeItem(temp_str, split(split_length - 1), sliderFoodRating.value)
+            }
+            else {
+                console.debug("Remove Button Too Few Parameters")
+            }
+            updateRemovalList()
+        }
+        else {
+            console.debug("Remove Button Nothing Selected")
+        }
+    }
+
     Text {
         id: elementRemoveItemBelow
         x: 166
@@ -29,7 +68,11 @@ Item {
         height: 61
         previewText: "Item Name"
         //enterKeyAction: TODO: Add Enter Key Action
-        onEnterKeyClicked: textFieldFoodName.focus = true
+        //TODO: Add Response to UPC Code Being Scanned In
+        onEnterKeyClicked: {
+            textFieldFoodNameSearch.focus = true
+            updateRemovalList()
+        }
     }
 
     Text {
@@ -98,8 +141,8 @@ Item {
 
     Slider {
         id: sliderFoodRating
-        x: 219
-        y: 259
+        x: 15
+        y: 318
         width: 278
         height: 40
         orientation: Slider.SnapAlways
@@ -110,16 +153,16 @@ Item {
 
     Text {
         id: elementRateFoodUse
-        x: 225
-        y: 211
+        x: 22
+        y: 208
         text: qsTr("Rate Amount Remaining")
         font.pixelSize: 24
     }
 
     Text {
         id: elementNone
-        x: 88
-        y: 267
+        x: 14
+        y: 276
         text: qsTr("None (0)")
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
@@ -128,8 +171,8 @@ Item {
 
     Text {
         id: elementNone1
-        x: 537
-        y: 267
+        x: 220
+        y: 276
         text: qsTr("All (10)")
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 21
@@ -139,7 +182,7 @@ Item {
     Button {
         id: buttonRemoveItem
         x: 274
-        y: 345
+        y: 393
         width: 168
         height: 64
         text: qsTr("Remove Item")
@@ -147,6 +190,52 @@ Item {
         font.bold: false
         font.pointSize: 15
         spacing: 6
+        onClicked: {
+            removeItem()
+        }
     }
 
+    Text {
+        id: elementFindExactFood
+        x: 467
+        y: 208
+        text: qsTr("Select Item")
+        font.pixelSize: 24
+    }
+
+    ListView {
+        id: listView
+        x: 321
+        y: 241
+        width: 366
+        height: 124
+        currentIndex: 0
+        clip: true
+        highlight: Rectangle {
+            color: 'green'
+        }
+        highlightFollowsCurrentItem: true
+
+        delegate: Item {
+            x: 5
+            width: 366
+            height: 40
+            Row {
+                id: row1
+                Text {
+                    text: name
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.bold: true
+                }
+                spacing: 10
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: listView.currentIndex = index
+            }
+        }
+        model: ListModel {
+            id: removeListModel
+        }
+    }
 }

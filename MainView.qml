@@ -7,12 +7,16 @@ import QtQuick.Controls.Imagine 2.3
 import Qt.labs.calendar 1.0
 
 Item {
+    id:mainView
     width: 800
     height: 480
 
+    //Signals Listing
+     signal refreshAll()
+
     Rectangle {
         id: rectangle
-        x: 716
+        x: 715
         y: 0
         width: 85
         height: 480
@@ -26,7 +30,10 @@ Item {
             height: 65
             text: "+"
             font.pointSize: 32
-            onClicked: swapView.currentIndex = 1
+            onClicked: {
+                swapView.currentIndex = 2
+                refreshAll()
+            }
         }
 
         RoundButton {
@@ -37,7 +44,10 @@ Item {
             height: 65
             text: "-"
             font.pointSize: 32
-            onClicked: swapView.currentIndex = 2
+            onClicked: {
+                swapView.currentIndex = 3
+                refreshAll()
+            }
         }
 
         RoundButton {
@@ -48,7 +58,11 @@ Item {
             height: 65
             text: "\u2139"
             font.pointSize: 32
-            onClicked: swapView.currentIndex = 3
+            onClicked: {
+                swapView.currentIndex = 4
+                refreshAll()
+            }
+
         }
 
         RoundButton {
@@ -59,7 +73,10 @@ Item {
             height: 65
             text: "\u2302"
             font.pointSize: 32
-            onClicked: swapView.currentIndex = 0
+            onClicked: {
+                swapView.currentIndex = 1
+                refreshAll()
+            }
         }
     }
 
@@ -72,6 +89,7 @@ Item {
 
         //https://stackoverflow.com/questions/45308023/how-to-use-qml-stackview
 
+        StartScreen {}
         HomeScreen {}
         AddItemScreen {}
         RemoveItemScreen {}

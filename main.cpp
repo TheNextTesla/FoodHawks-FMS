@@ -1,20 +1,9 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
+
 #include <chrono>
-#include "json.hpp"
-#include "fooditem.h"
-
-void to_json(nlohmann::json& j, const FoodItem& item)
-{
-    j = nlohmann::json{{"food_name", item.food_name}, {"upc", item.upc}, {"time", item.time}};
-}
-
-void from_json(const nlohmann::json& j, FoodItem& item)
-{
-    j.at("food_name").get_to(item.food_name);
-    j.at("upc").get_to(item.upc);
-    j.at("time").get_to(item.time);
-}
+#include "foodlist.h"
 
 int main(int argc, char *argv[])
 {
@@ -25,6 +14,11 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    FoodList * foodlist = new FoodList;
+    foodlist->loadInList();
+    engine.rootContext()->setContextProperty("foodList", foodlist);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;

@@ -14,7 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-    fooditem.cpp
+    fooditem.cpp \
+    foodlist.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,4 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     fooditem.h \
-    json.hpp
+    json.hpp \
+    foodlist.h \
+    json_helper.h

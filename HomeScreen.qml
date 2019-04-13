@@ -46,24 +46,26 @@ Item {
             }
         }
         model: ListModel {
-            ListElement {
-                name: "Grey"
-                colorCode: "grey"
-            }
+            id: homeListModel
+        }
+        Connections {
+            target: mainView
+            onRefreshAll: {
+                console.debug("Updating HomeListModel")
+                homeListModel.clear()
 
-            ListElement {
-                name: "Red"
-                colorCode: "red"
-            }
+                var food_colors = foodList.getFoodItemColors()
+                var food_names = foodList.getFoodItemNames()
+                var index = 0
 
-            ListElement {
-                name: "Blue"
-                colorCode: "blue"
-            }
-
-            ListElement {
-                name: "Green"
-                colorCode: "green"
+                for (index = 0; index < food_names.length; index++) {
+                    if(index < food_colors.length) {
+                        homeListModel.append({"name":food_names[index], "colorCode":food_colors[index]})
+                    }
+                    else {
+                        homeListModel.append({"name":food_names[index], "colorCode":"blue"})
+                    }
+                }
             }
         }
     }

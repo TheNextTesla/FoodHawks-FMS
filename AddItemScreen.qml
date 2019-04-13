@@ -21,8 +21,8 @@ Item {
 
     TextKeyField {
         id: textFieldFoodName
-        x: 369
-        y: 118
+        x: 370
+        y: 130
         width: 318
         height: 61
         previewText: "Item Name"
@@ -65,11 +65,16 @@ Item {
     Button {
         id: buttonAddItem
         x: 416
-        y: 287
+        y: 234
         width: 225
         height: 66
         text: "Add Item"
         checkable: false
+        onClicked: {
+            foodList.addItem(textFieldFoodName.text, "", calendar.selectedDate);
+            textFieldFoodName.text = ""
+            textFieldFoodName.focus = false
+        }
     }
 
     Rectangle {
@@ -112,5 +117,3 @@ Item {
     }
 
 }
-
-

@@ -9,5 +9,6 @@
         <file>MainView.qml</file>
         <file>RemoveItemScreen.qml</file>
         <file>StatisticsScreen.qml</file>
+        <file>StartScreen.qml</file>
     </qresource>
 </RCC>
