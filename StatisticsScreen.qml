@@ -16,4 +16,11 @@ Item {
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 28
     }
+
+    Connections {
+        target: mainView
+        onRefreshAll: {
+            //TODO: Add Updating Method of the Stat Screen
+        }
+    }
 }
