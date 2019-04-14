@@ -120,5 +120,6 @@ Item {
         AddItemScreen {}
         RemoveItemScreen {}
         StatisticsScreen {}
+        SettingsScreen {}
     }
 }

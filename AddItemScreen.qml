@@ -63,7 +63,7 @@ Item {
         y: 88
         width: 246
         height: 24
-        text: qsTr("Date of Purchase")
+        text: qsTr("Printed Date or Date of Purchase")
         verticalAlignment: Text.AlignVCenter
         font.pixelSize: 12
         horizontalAlignment: Text.AlignHCenter

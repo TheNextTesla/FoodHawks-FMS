@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <QDebug>
 
 #include "foodlist.h"
 #include "json.hpp"
@@ -39,6 +40,40 @@ bool FoodList::removeItem(QString name, QString date, float amount)
         itr++;
     }
     return false;
+}
+
+void FoodList::addUser(QString user_code)
+{
+    std::string user_code_std = user_code.toUtf8().constData();
+    users.push_back(user_code_std);
+    saveOutList();
+}
+
+void FoodList::sendMessage(QString message_contents)
+{
+    if(users.size() == 0)
+        return;
+    std::string command = "curl -s --form-string \"token=a986bnsrqx3hsip8sd2xdp3tzf9fd6\" --form-string \"user=";
+    for(unsigned int i = 0; i < users.size(); i++)
+    {
+        command += users[i];
+        if(i != 0 && i < users.size() - 1)
+            command += ",";
+    }
+    command += "\" --form-string \"message=";
+    command += message_contents.toUtf8().constData();
+    command += "\" https://api.pushover.net/1/messages.json";
+    qDebug() << "Command Executing " << QString::fromStdString(command);
+    system(command.c_str());
+}
+
+bool FoodList::removeAllUsers()
+{
+    if(users.size() == 0)
+        return false;
+    users.clear();
+    saveOutList();
+    return true;
 }
 
 /*
@@ -111,6 +146,7 @@ bool FoodList::loadInList()
         items.clear();
         jsonObject.at("items").get_to(this->items);
         jsonObject.at("waste").get_to(this->waste);
+        jsonObject.at("users").get_to(this->users);
 
         return true;
     }
@@ -126,6 +162,7 @@ bool FoodList::saveOutList()
     nlohmann::json jsonObject;
     jsonObject["items"] = this->items;
     jsonObject["waste"] = this->waste;
+    jsonObject["users"] = this->users;
 
     std::ofstream jsonFile("/home/pi/fms.json");
     if(jsonFile.is_open())

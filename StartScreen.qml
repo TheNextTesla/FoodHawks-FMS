@@ -1,4 +1,7 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.3
+import QtQuick.Controls.Material 2.0
+import QtQuick.Controls.Imagine 2.3
 
 Item {
     width: 715
@@ -61,18 +64,30 @@ Item {
         height: 89
         color: "#b5eab7"
 
+        RoundButton {
+            id: roundButtonSettings
+            x: 20
+            y: 12
+            width: 65
+            height: 65
+            text: "\u2699"
+            font.pointSize: 29
+            onClicked: {
+                swapView.currentIndex = 5
+            }
+        }
+
         Text {
-            id: elementHomeText
-            x: 8
-            y: 8
-            width: 376
-            height: 73
-            text: qsTr("Press The Home Button to Start")
-            font.underline: true
-            font.italic: true
+            id: elementGoToSettings
+            x: 91
+            y: 12
+            width: 293
+            height: 65
+            text: qsTr("Press Here to Configure the FMS, or Press Home to Start")
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 23
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            font.pixelSize: 20
         }
     }
 

@@ -10,5 +10,6 @@
         <file>RemoveItemScreen.qml</file>
         <file>StatisticsScreen.qml</file>
         <file>StartScreen.qml</file>
+        <file>SettingsScreen.qml</file>
     </qresource>
 </RCC>
