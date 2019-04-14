@@ -25,6 +25,7 @@ Item {
         y: 107
         width: 485
         height: 328
+        clip: true
         delegate: Item {
             x: 5
             width: 80

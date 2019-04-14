@@ -9,13 +9,31 @@ Item {
     height: 480
 
     function updateRemovalList() {
-        removeListModel.clear()
-        var itemsContaining = foodList.getFoodItemsContaining(textFieldFoodNameSearch.text)
-        var index = 0;
-        console.debug("Enter Pressed")
-        for (index = 0; index < itemsContaining.length; index++) {
-            removeListModel.append({"name":itemsContaining[index]})
-            console.debug(itemsContaining[index])
+        var current_text = textFieldFoodNameSearch.text
+        if(isNumeric(current_text)) {
+            var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
+            request_url += current_text
+            request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
+            getData(request_url, function(api_val){
+                var json_obj = JSON.parse(api_val)
+                var name = json_obj.list.item[0].name
+                var itemsContaining = foodList.getFoodItemsContaining(name)
+                var index = 0;
+                removeListModel.clear()
+                for (index = 0; index < itemsContaining.length; index++) {
+                    removeListModel.append({"name":itemsContaining[index]})
+                    console.debug(itemsContaining[index])
+                }
+            })
+        }
+        else {
+            var itemsContaining = foodList.getFoodItemsContaining(current_text)
+            var index = 0;
+            removeListModel.clear()
+            for (index = 0; index < itemsContaining.length; index++) {
+                removeListModel.append({"name":itemsContaining[index]})
+                console.debug(itemsContaining[index])
+            }
         }
     }
 
@@ -70,6 +88,7 @@ Item {
         //enterKeyAction: TODO: Add Enter Key Action
         //TODO: Add Response to UPC Code Being Scanned In
         onEnterKeyClicked: {
+            console.debug("Enter Pressed")
             textFieldFoodNameSearch.focus = true
             updateRemovalList()
         }

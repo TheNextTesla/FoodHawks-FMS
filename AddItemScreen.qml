@@ -6,6 +6,33 @@ Item {
     width: 715
     height: 480
 
+    function addItem() {
+        var current_text = textFieldFoodName.text
+        var current_date = calendar.selectedDate
+        if(isNumeric(current_text)) {
+            var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
+            request_url += current_text
+            request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
+            getData(request_url, function(api_val) {
+                var json_obj = JSON.parse(api_val)
+                var name = json_obj.list.item[0].name
+                if(name !== "") {
+                    foodList.addItem(name, current_text, current_date);
+                }
+                else {
+                    foodList.addItem("", current_text, current_date);
+                }
+                textFieldFoodName.text = ""
+                textFieldFoodName.focus = false
+            })
+        }
+        else {
+            foodList.addItem(current_text, "", calendar.selectedDate);
+            textFieldFoodName.text = ""
+            textFieldFoodName.focus = false
+        }
+    }
+
     Text {
         id: elementScanItemBelow
         x: 166
@@ -71,9 +98,7 @@ Item {
         text: "Add Item"
         checkable: false
         onClicked: {
-            foodList.addItem(textFieldFoodName.text, "", calendar.selectedDate);
-            textFieldFoodName.text = ""
-            textFieldFoodName.focus = false
+            addItem()
         }
     }
 

@@ -20,6 +20,7 @@ signals:
 public slots:
     void addItem(QString name, QString upc, QDate date);
     bool removeItem(QString name, QString date, float amount);
+    //QString findItemNameByUPC(QString upc);
     QList<QString> getFoodItemsContaining(QString name);
     QList<QString> getFoodItemNames();
     QList<QString> getFoodItemColors();

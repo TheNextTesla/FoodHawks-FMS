@@ -6,6 +6,8 @@
 #include "foodlist.h"
 #include "json.hpp"
 #include "json_helper.h"
+#include "sqlite3.h"
+#include "sqlite3_helper.h"
 
 FoodList::FoodList(QObject *parent) : QObject(parent)
 {
@@ -38,6 +40,17 @@ bool FoodList::removeItem(QString name, QString date, float amount)
     }
     return false;
 }
+
+/*
+QString findItemNameByUPC(QString upc)
+{
+    std::string code = upc.toUtf8().constData();
+
+    //TODO: A
+
+
+}
+*/
 
 QList<QString> FoodList::getFoodItemNames()
 {

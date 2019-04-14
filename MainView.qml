@@ -14,6 +14,32 @@ Item {
     //Signals Listing
      signal refreshAll()
 
+    //Effective Global Function Listing
+    function isNumeric(value) {
+        return /^-{0,1}\d+$/.test(value);
+    }
+
+    function sleep(milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+          break;
+        }
+      }
+    }
+
+    function getData(url, func) {
+        console.debug("call " + url)
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                func(xmlhttp.responseText)
+            }
+        }
+        xmlhttp.open("GET", url, true)
+        xmlhttp.send()
+    }
+
     Rectangle {
         id: rectangle
         x: 715
