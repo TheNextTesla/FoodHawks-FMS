@@ -15,7 +15,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     fooditem.cpp \
-    foodlist.cpp
+    foodlist.cpp \
+    sqlite3.c
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,6 @@ HEADERS += \
     fooditem.h \
     json.hpp \
     foodlist.h \
-    json_helper.h
+    json_helper.h \
+    sqlite3.h \
+    sqlite3_helper.h
