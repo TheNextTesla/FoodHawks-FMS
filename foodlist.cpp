@@ -127,14 +127,46 @@ QString FoodList::findItemNameByUPC(QString upc)
 
 QList<QString> FoodList::getFoodItemColors()
 {
+    qDebug() << "Get Item Colors";
     std::vector<FoodItem> items_temp = items;
     QList<QString> items_return;
     items_return.reserve((int) items_temp.size());
+    std::vector<std::string> return_vals;
 
     for(unsigned int i = 0; i < items_temp.size(); i++)
     {
-        items_return.push_back(QString::fromStdString("Blue"));
+        return_vals.clear();
+        std::string request = "SELECT EXTENSIONRANGE FROM FoodDB WHERE NAME=\"";
+        request += items_temp[i].food_name;
+        request += "\";";
+
+        int rc = sqlite3_exec(database, request.c_str(), find_item_callback,
+                              &return_vals, nullptr);
+
+        if(rc == SQLITE_OK && return_vals.size() > 0)
+        {
+            qDebug() << "Current Return Value " + QString::fromStdString(return_vals[0]);
+            std::size_t find_delim = return_vals[0].find(",");
+            int first = std::stoi(return_vals[0].substr(0, find_delim));
+            int second = std::stoi(return_vals[0].substr(find_delim + 1, return_vals[0].size()));
+            QDate item_date = QDate::fromString(QString::fromStdString(items_temp[i].time));
+            int days = item_date.daysTo(QDate::currentDate());
+            if(days < first)
+                items_return.push_back(QString::fromStdString("Green"));
+            else if(days < second)
+                items_return.push_back(QString::fromStdString("Yellow"));
+            else
+                items_return.push_back(QString::fromStdString("Red"));
+        }
+        else
+        {
+            qDebug() << "SQLITE Command Failed: " + QString::fromStdString(request);
+            if(return_vals.size() > 0)
+                qDebug() << ": Function Retuned: " + QString::fromStdString(return_vals[0]);
+            items_return.push_back(QString::fromStdString("Blue"));
+        }
     }
+    qDebug() << "Get Item Colors End";
     return items_return;
 }
 
@@ -149,6 +181,44 @@ QList<QString> FoodList::getFoodItemNames()
         items_return.push_back(QString::fromStdString(items_temp[i].food_name));
     }
     return items_return;
+}
+
+QList<QString> FoodList::getRemovedFoodItems()
+{
+    qDebug() << "Getting Removed Food Items";
+    std::map<std::string, int>::const_iterator itr = waste.begin();
+    QList<QString> return_vals;
+    while(itr != waste.end())
+    {
+        return_vals.push_back(QString::fromStdString(itr->first));
+        itr++;
+    }
+    qDebug() << "Done Getting Removed Food Items";
+    return return_vals;
+}
+
+QList<float> FoodList::getRemovedFoodWaste()
+{
+    qDebug() << "Getting Removed Food Waste";
+    std::map<std::string, int>::const_iterator itr = waste.begin();
+    QList<float> return_vals;
+
+    std::vector<int> temp_vals;
+    unsigned int sum = 0;
+    while(itr != waste.end())
+    {
+        temp_vals.push_back(itr->second);
+        sum += itr->second;
+        itr++;
+    }
+
+    for(unsigned int i = 0; i < temp_vals.size(); i++)
+    {
+        return_vals.push_back(100.0 * temp_vals[i] / sum);
+    }
+
+    qDebug() << "Done Getting Removed Food Waste";
+    return return_vals;
 }
 
 QList<QString> FoodList::getFoodItemsContaining(QString name)
@@ -190,6 +260,7 @@ bool FoodList::loadInList()
     }
     else
     {
+        qDebug() << "JSON File Failed to Load";
         jsonFile.close();
         return false;
     }
@@ -209,6 +280,7 @@ bool FoodList::saveOutList()
         jsonFile.close();
         return true;
     }
+    qDebug() << "JSON File Failed to Save";
     return false;
 }
 
@@ -235,5 +307,6 @@ bool FoodList::saveDatabase()
     int exit = sqlite3_close(database);
     if(exit == SQLITE_OK)
         return true;
+    qDebug() << "SQL Database Saving Failed";
     return false;
 }

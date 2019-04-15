@@ -39,6 +39,8 @@ public slots:
     //Access Methods
     QList<QString> getFoodItemsContaining(QString name);   
     QList<QString> getFoodItemNames();
+    QList<QString> getRemovedFoodItems();
+    QList<float> getRemovedFoodWaste();
 
 public:
     std::vector<FoodItem> items;

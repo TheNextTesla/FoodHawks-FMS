@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtCharts 2.0
+import QtGraphicalEffects 1.0
 
 Item {
     width: 715
@@ -10,17 +12,41 @@ Item {
         y: 26
         width: 383
         height: 67
-        text: qsTr("Waste Statistics Screen")
+        text: qsTr("Your Waste Statistics")
         renderType: Text.NativeRendering
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         font.pixelSize: 28
     }
 
+    ChartView {
+        id: chartViewPie
+        x: 158
+        y: 90
+        width: 400
+        height: 300
+        titleColor: "#bc1515"
+        title: "Most Wasted Items"
+        theme: ChartView.ChartThemeBrownSand
+        antialiasing: true
+
+        PieSeries {
+            id: pieSeries
+        }
+    }
+
     Connections {
         target: mainView
         onRefreshAll: {
-            //TODO: Add Updating Method of the Stat Screen
+            console.debug("Updating StatViewChart")
+            pieSeries.clear()
+            var waste_list = foodList.getRemovedFoodItems();
+            var waste_ratings = foodList.getRemovedFoodWaste();
+
+            var index = 0
+            for(index = 0; index < waste_list.length; index++) {
+               pieSeries.append(waste_list[i], waste_ratings[i])
+            }
         }
     }
 }

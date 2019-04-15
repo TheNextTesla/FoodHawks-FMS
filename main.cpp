@@ -1,4 +1,5 @@
 #include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
@@ -22,14 +23,19 @@ int main(int argc, char *argv[])
     atexit(on_exit);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
+    qDebug() << "Creating FoodList Object";
     foodlist = new FoodList;
 
+    qDebug() << "Loading JSON List";
     foodlist->loadInList();
+
+    qDebug() << "Loading SQL Database";
     foodlist->loadDatabase();
 
+    qDebug() << "Injecting to Root Context";
     engine.rootContext()->setContextProperty("foodList", foodlist);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
