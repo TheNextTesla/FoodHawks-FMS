@@ -42,6 +42,22 @@ bool FoodList::removeItem(QString name, QString date, float amount)
     return false;
 }
 
+bool FoodList::renameItem(QString old_name, QString new_name)
+{
+    std::string oldn = old_name.toUtf8().constData();
+    std::string newn = new_name.toUtf8().constData();
+    for(unsigned int i = 0; i < items.size(); i++)
+    {
+        if(items[i].food_name == oldn)
+        {
+            items[i].rename(newn);
+            saveOutList();
+            return true;
+        }
+    }
+    return false;
+}
+
 void FoodList::addUser(QString user_code)
 {
     std::string user_code_std = user_code.toUtf8().constData();
@@ -145,12 +161,13 @@ QList<QString> FoodList::getFoodItemColors()
 
         if(rc == SQLITE_OK && return_vals.size() > 0)
         {
-            qDebug() << "Current Return Value " + QString::fromStdString(return_vals[0]);
+            //qDebug() << "Current Return Value " + QString::fromStdString(return_vals[0]);
             std::size_t find_delim = return_vals[0].find(",");
             int first = std::stoi(return_vals[0].substr(0, find_delim));
             int second = std::stoi(return_vals[0].substr(find_delim + 1, return_vals[0].size()));
             QDate item_date = QDate::fromString(QString::fromStdString(items_temp[i].time));
             int days = item_date.daysTo(QDate::currentDate());
+            //qDebug() << QString::fromStdString("There are " + std::to_string(days) + " days until this goes bad");
             if(days < first)
                 items_return.push_back(QString::fromStdString("Green"));
             else if(days < second)
@@ -166,7 +183,7 @@ QList<QString> FoodList::getFoodItemColors()
             items_return.push_back(QString::fromStdString("Blue"));
         }
     }
-    qDebug() << "Get Item Colors End";
+    //qDebug() << "Get Item Colors End";
     return items_return;
 }
 
@@ -193,15 +210,15 @@ QList<QString> FoodList::getRemovedFoodItems()
         return_vals.push_back(QString::fromStdString(itr->first));
         itr++;
     }
-    qDebug() << "Done Getting Removed Food Items";
+    //qDebug() << "Done Getting Removed Food Items";
     return return_vals;
 }
 
-QList<float> FoodList::getRemovedFoodWaste()
+QList<qreal> FoodList::getRemovedFoodWaste()
 {
     qDebug() << "Getting Removed Food Waste";
     std::map<std::string, int>::const_iterator itr = waste.begin();
-    QList<float> return_vals;
+    QList<qreal> return_vals;
 
     std::vector<int> temp_vals;
     unsigned int sum = 0;
@@ -217,7 +234,7 @@ QList<float> FoodList::getRemovedFoodWaste()
         return_vals.push_back(100.0 * temp_vals[i] / sum);
     }
 
-    qDebug() << "Done Getting Removed Food Waste";
+    //qDebug() << "Done Getting Removed Food Waste";
     return return_vals;
 }
 

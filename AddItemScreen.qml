@@ -22,19 +22,21 @@ Item {
                 request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
                 getData(request_url, function(api_val) {
                     var json_obj = JSON.parse(api_val)
-                    var name = json_obj.list.item[0].name
-                    if(name !== "") {
-                        foodList.addItem(name, current_text, current_date);
+                    try {
+                        var name = json_obj.list.item[0].name
+                        foodList.addItem(name, current_text, current_date)
+                        textFieldFoodName.text = ""
+                        textFieldFoodName.focus = false
+                        passDatabaseInfo(current_text, name)
+                        swapView.currentIndex = 6
                     }
-                    else {
-                        foodList.addItem("", current_text, current_date);
+                    catch (err) {
+                        foodList.addItem("", current_text, current_date)
+                        textFieldFoodName.text = ""
+                        textFieldFoodName.focus = false
+                        passDatabaseInfo(current_text, name)
+                        swapView.currentIndex = 6
                     }
-                    textFieldFoodName.text = ""
-                    textFieldFoodName.focus = false
-
-                    //Add New to Database
-                    passDatabaseInfo(current_text, name)
-                    swapView.currentIndex = 6
                 })
             }
         }

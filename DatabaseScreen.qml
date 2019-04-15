@@ -162,6 +162,8 @@ Item {
         text: qsTr("Add to Database")
         font.pointSize: 14
         onClicked: {
+            foodList.renameItem("", textKeyFieldName.text)
+
             var extensionString = Math.round(dialExtension.value * 365 / 2) + "," + Math.round(dialExtension.value * 365)
             foodList.addNewDatabaseEntry(textKeyFieldUPC.text, textKeyFieldName.text,
                                          textKeyFieldCompany.text, textKeyFieldFoodGroup.text, extensionString)

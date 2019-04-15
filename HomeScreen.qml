@@ -1,4 +1,6 @@
 import QtQuick 2.0
+import QtQuick.Controls 2.3
+import QtQuick.Controls.Material 2.0
 
 Item {
     width: 715
@@ -141,5 +143,109 @@ Item {
                 }
             }
         }
+    }
+
+    RoundButton {
+        id: roundButtonRecipeSuggestion
+        x: 425
+        y: 17
+        width: 45
+        height: 45
+        text: "🍲"
+        font.pointSize: 21
+        onClicked: {
+            //TODO: Implement Recipe Suggestion
+        }
+    }
+
+    Text {
+        id: elementRecipeSuggestions
+        x: 412
+        y: 68
+        width: 71
+        height: 27
+        text: qsTr("Send Recipe Suggestion")
+        font.italic: true
+        wrapMode: Text.WordWrap
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+        font.pixelSize: 12
+    }
+
+    RoundButton {
+        id: roundButtonListFoodsToUseSoon
+        x: 515
+        y: 17
+        width: 45
+        height: 45
+        text: "🍏"
+        font.pointSize: 21
+        onClicked: {
+            console.debug("Foods to Use Soon Button")
+            var food_item_names = foodList.getFoodItemNames()
+            var food_item_colors = foodList.getFoodItemColors()
+
+            var index = 0
+            var final_array = []
+            for(index = 0; index < food_item_names.length; index++) {
+                if(index < food_item_colors.length && food_item_colors[index] === "Red") {
+                    final_array.push(food_item_names[index])
+                }
+            }
+            var str_message = "Food Management System: Food to Use Soon:\n"
+
+            for(index = 0; index < final_array.length; index++) {
+                str_message += final_array[index] + "\n"
+            }
+            foodList.sendMessage(str_message)
+        }
+    }
+
+    Text {
+        id: elementFoodsToUseSoon
+        x: 498
+        y: 68
+        width: 71
+        height: 27
+        text: qsTr("Send Foods to Use Soon")
+        font.italic: true
+        font.pixelSize: 12
+        wrapMode: Text.WordWrap
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+    }
+
+    RoundButton {
+        id: roundButtonListAllFoods
+        x: 605
+        y: 17
+        width: 45
+        height: 45
+        text: "🍴"
+        font.pointSize: 21
+        onClicked: {
+            console.debug("List All Foods Button Pressed")
+            var total_food_list_w_dates = foodList.getFoodItemsContaining("")
+            var str_message = "Food Management System: Current Inventory:\n"
+            var index = 0
+            for(index = 0; index < total_food_list_w_dates.length; index++) {
+                str_message += total_food_list_w_dates[index] + "\n"
+            }
+            foodList.sendMessage(str_message)
+        }
+    }
+
+    Text {
+        id: elementAllFoods
+        x: 593
+        y: 68
+        width: 71
+        height: 27
+        text: "Send All Foods List"
+        font.italic: true
+        font.pixelSize: 12
+        wrapMode: Text.WordWrap
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
     }
 }

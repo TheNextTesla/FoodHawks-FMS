@@ -24,6 +24,7 @@ public slots:
     //Item Management Methods
     void addItem(QString name, QString upc, QDate date);
     bool removeItem(QString name, QString date, float amount);
+    bool renameItem(QString old_name, QString new_name);
 
     //User Management Methods
     void addUser(QString user_code);
@@ -40,7 +41,7 @@ public slots:
     QList<QString> getFoodItemsContaining(QString name);   
     QList<QString> getFoodItemNames();
     QList<QString> getRemovedFoodItems();
-    QList<float> getRemovedFoodWaste();
+    QList<qreal> getRemovedFoodWaste();
 
 public:
     std::vector<FoodItem> items;

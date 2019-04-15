@@ -11,20 +11,32 @@ Item {
     function updateRemovalList() {
         var current_text = textFieldFoodNameSearch.text
         if(isNumeric(current_text)) {
-            var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
-            request_url += current_text
-            request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
-            getData(request_url, function(api_val){
-                var json_obj = JSON.parse(api_val)
-                var name = json_obj.list.item[0].name
-                var itemsContaining = foodList.getFoodItemsContaining(name)
-                var index = 0;
+            var data_find = foodList.findItemNameByUPC(current_text)
+            if(data_find !== "") {
+                var items_containing = foodList.getFoodItemsContaining(data_find)
+                var index_inner = 0;
                 removeListModel.clear()
-                for (index = 0; index < itemsContaining.length; index++) {
-                    removeListModel.append({"name":itemsContaining[index]})
-                    console.debug(itemsContaining[index])
+                for (index_inner = 0; index_inner < items_containing.length; index_inner++) {
+                    removeListModel.append({"name":items_containing[index_inner]})
+                    console.debug(items_containing[index_inner])
                 }
-            })
+            }
+            else {
+                var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
+                request_url += current_text
+                request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
+                getData(request_url, function(api_val){
+                    var json_obj = JSON.parse(api_val)
+                    var name = json_obj.list.item[0].name
+                    var itemsContaining = foodList.getFoodItemsContaining(name)
+                    var index = 0;
+                    removeListModel.clear()
+                    for (index = 0; index < itemsContaining.length; index++) {
+                        removeListModel.append({"name":itemsContaining[index]})
+                        console.debug(itemsContaining[index])
+                    }
+                })
+            }
         }
         else {
             var itemsContaining = foodList.getFoodItemsContaining(current_text)
@@ -39,7 +51,22 @@ Item {
 
     function removeItem() {
         if(listView.currentIndex != -1) {
-            var foodDateString = foodList.getFoodItemsContaining(textFieldFoodNameSearch.text)[listView.currentIndex]
+            var current_text = textFieldFoodNameSearch.text
+            var foodDateStrings = []
+            if(isNumeric(current_text)) {
+                var data_find = foodList.findItemNameByUPC(current_text)
+                if(data_find !== "") {
+                    foodDateStrings = foodList.getFoodItemsContaining(data_find)
+                }
+                else {
+                    foodDateStrings = foodList.getFoodItemsContaining("")
+                }
+            }
+            else {
+                foodDateStrings = foodList.getFoodItemsContaining(current_text)
+            }
+
+            var foodDateString = foodDateStrings[listView.currentIndex]
             console.debug("Removing " + foodDateString)
             var split = foodDateString.split(" | ")
             var split_length = split.length

@@ -13,6 +13,8 @@ public:
 public:
     FoodItem();
     FoodItem(const std::string & food_name, const std::string & upc, const std::string time);
+
+    void rename(const std::string & new_name);
 };
 
 #endif // FOODITEM_H

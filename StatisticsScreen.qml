@@ -21,10 +21,10 @@ Item {
 
     ChartView {
         id: chartViewPie
-        x: 158
+        x: 8
         y: 90
-        width: 400
-        height: 300
+        width: 699
+        height: 382
         titleColor: "#bc1515"
         title: "Most Wasted Items"
         theme: ChartView.ChartThemeBrownSand
@@ -45,7 +45,7 @@ Item {
 
             var index = 0
             for(index = 0; index < waste_list.length; index++) {
-               pieSeries.append(waste_list[i], waste_ratings[i])
+               pieSeries.append(waste_list[index], waste_ratings[index])
             }
         }
     }
