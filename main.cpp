@@ -3,20 +3,33 @@
 #include <QQmlContext>
 
 #include <chrono>
+#include <stdlib.h>
+#include <QDebug>
 #include "foodlist.h"
+
+static FoodList * foodlist = nullptr;
+
+void on_exit()
+{
+    qDebug() << "Shutting Down";
+    if(foodlist != nullptr)
+        foodlist->saveDatabase();
+}
 
 int main(int argc, char *argv[])
 {
     qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
+    atexit(on_exit);
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QGuiApplication app(argc, argv);
-
     QQmlApplicationEngine engine;
 
-    FoodList * foodlist = new FoodList;
+    foodlist = new FoodList;
+
     foodlist->loadInList();
+    foodlist->loadDatabase();
+
     engine.rootContext()->setContextProperty("foodList", foodlist);
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

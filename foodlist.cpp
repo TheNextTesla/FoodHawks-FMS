@@ -12,7 +12,7 @@
 
 FoodList::FoodList(QObject *parent) : QObject(parent)
 {
-
+    database = nullptr;
 }
 
 void FoodList::addItem(QString name, QString upc, QDate date)
@@ -76,16 +76,68 @@ bool FoodList::removeAllUsers()
     return true;
 }
 
-/*
-QString findItemNameByUPC(QString upc)
+void FoodList::addNewDatabaseEntry(QString upc, QString name, QString company,
+                         QString food_group, QString extension_range)
+{
+    std::string upc_str = upc.toUtf8().constData();
+    std::string name_str = name.toUtf8().constData();
+    std::string company_str = company.toUtf8().constData();
+    std::string food_group_str = food_group.toUtf8().constData();
+    std::string extension_range_str = extension_range.toUtf8().constData();
+
+    std::string request = "INSERT INTO FoodDB VALUES(";
+    request += "\"" + upc_str + "\",";
+    request += "\"" + name_str + "\",";
+    request += "\"" + company_str + "\",";
+    request += "\"" + food_group_str + "\",";
+    request += "\"" + extension_range_str + "\",";
+    request += "\"" + extension_range_str + "\",";
+    request += std::string("\"\"") + "," + "\"\");";
+
+    int rc = sqlite3_exec(database, request.c_str(), nullptr, nullptr, nullptr);
+
+    if(rc != SQLITE_OK)
+        qDebug() << "SQLITE Command Failed: " + QString::fromStdString(request);
+}
+
+QString FoodList::findItemNameByUPC(QString upc)
 {
     std::string code = upc.toUtf8().constData();
+    std::string request = "SELECT NAME FROM FoodDB WHERE UPC=\"";
+    request += code;
+    request += "\";";
 
-    //TODO: A
+    std::vector<std::string> return_vals;
+    int rc = sqlite3_exec(database, request.c_str(), find_item_callback,
+                          &return_vals, nullptr);
 
+    if(rc == SQLITE_OK && return_vals.size() > 0)
+    {
+        return QString::fromStdString(return_vals[0]);
+    }
+    else
+    {
+        qDebug() << "SQLITE Command Failed: " + QString::fromStdString(request);
+        if(return_vals.size() > 0)
+            qDebug() << ": Function Retuned: " + QString::fromStdString(return_vals[0]);
+    }
 
+    return QString::fromStdString("");
 }
-*/
+
+QList<QString> FoodList::getFoodItemColors()
+{
+    std::vector<FoodItem> items_temp = items;
+    QList<QString> items_return;
+    items_return.reserve((int) items_temp.size());
+
+    for(unsigned int i = 0; i < items_temp.size(); i++)
+    {
+        items_return.push_back(QString::fromStdString("Blue"));
+    }
+    return items_return;
+}
+
 
 QList<QString> FoodList::getFoodItemNames()
 {
@@ -116,20 +168,6 @@ QList<QString> FoodList::getFoodItemsContaining(QString name)
             items_return.push_back(QString::fromStdString(itr->food_name + " | " + itr->time));
         }
         itr++;
-    }
-    return items_return;
-}
-
-QList<QString> FoodList::getFoodItemColors()
-{
-    std::vector<FoodItem> items_temp = items;
-    QList<QString> items_return;
-    items_return.reserve((int) items_temp.size());
-
-    for(unsigned int i = 0; i < items_temp.size(); i++)
-    {
-        //TODO: Replace With Food Decision Making Method
-        items_return.push_back(QString::fromStdString("Blue"));
     }
     return items_return;
 }
@@ -171,5 +209,31 @@ bool FoodList::saveOutList()
         jsonFile.close();
         return true;
     }
+    return false;
+}
+
+bool FoodList::loadDatabase()
+{
+    sqlite3* db = nullptr;
+    int exit = sqlite3_open("/home/pi/database.db", &db);
+    if(exit == SQLITE_OK && db != nullptr)
+    {
+        database = db;
+        return true;
+    }
+    qDebug() << "SQL Database Loading Failed";
+    if(db != nullptr)
+        sqlite3_close(db);
+    return false;
+}
+
+bool FoodList::saveDatabase()
+{
+    if(database == nullptr)
+        return false;
+
+    int exit = sqlite3_close(database);
+    if(exit == SQLITE_OK)
+        return true;
     return false;
 }

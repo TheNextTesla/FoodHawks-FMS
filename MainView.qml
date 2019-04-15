@@ -12,7 +12,8 @@ Item {
     height: 480
 
     //Signals Listing
-     signal refreshAll()
+    signal refreshAll()
+    signal passDatabaseInfo(string upc, string name)
 
     //Effective Global Function Listing
     function isNumeric(value) {
@@ -47,7 +48,6 @@ Item {
         width: 85
         height: 480
         color: "#b0eb98"
-
         RoundButton {
             id: roundButtonAdd
             x: 10
@@ -121,5 +121,9 @@ Item {
         RemoveItemScreen {}
         StatisticsScreen {}
         SettingsScreen {}
+
+        DatabaseScreen {
+            id: databaseScreen
+        }
     }
 }

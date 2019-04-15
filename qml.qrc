@@ -11,5 +11,6 @@
         <file>StatisticsScreen.qml</file>
         <file>StartScreen.qml</file>
         <file>SettingsScreen.qml</file>
+        <file>DatabaseScreen.qml</file>
     </qresource>
 </RCC>
