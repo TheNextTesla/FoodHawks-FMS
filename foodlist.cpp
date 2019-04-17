@@ -108,7 +108,7 @@ void FoodList::addNewDatabaseEntry(QString upc, QString name, QString company,
     request += "\"" + food_group_str + "\",";
     request += "\"" + extension_range_str + "\",";
     request += "\"" + extension_range_str + "\",";
-    request += std::string("\"\"") + "," + "\"\");";
+    request += std::string("\"\"") + ");";
 
     int rc = sqlite3_exec(database, request.c_str(), nullptr, nullptr, nullptr);
 
@@ -156,12 +156,18 @@ QList<QString> FoodList::getFoodItemColors()
         request += items_temp[i].food_name;
         request += "\";";
 
+        if(request == "")
+        {
+            items_return.push_back(QString::fromStdString("Blue"));
+            continue;
+        }
+
         int rc = sqlite3_exec(database, request.c_str(), find_item_callback,
                               &return_vals, nullptr);
 
         if(rc == SQLITE_OK && return_vals.size() > 0)
         {
-            //qDebug() << "Current Return Value " + QString::fromStdString(return_vals[0]);
+            qDebug() << "Current Return Value " + QString::fromStdString(return_vals[0]);
             std::size_t find_delim = return_vals[0].find(",");
             int first = std::stoi(return_vals[0].substr(0, find_delim));
             int second = std::stoi(return_vals[0].substr(find_delim + 1, return_vals[0].size()));

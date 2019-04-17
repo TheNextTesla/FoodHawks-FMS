@@ -160,7 +160,7 @@ Item {
 
             var index = 0
             for(index = 0; index < food_item_names.length; index++) {
-                if(index < food_item_colors.length && food_item_colors[index] === "Red") {
+                if(index < food_item_colors.length && food_item_colors[index] === "Yellow") {
                     var orig_string = food_item_names[index]
                     var comma_string = orig_string.replace(/,/g, '%2C')
                     var html_string = comma_string.replace(/ /g, '+')
