@@ -14,7 +14,7 @@ Item {
             if(data_find !== "") {
                 foodList.addItem(data_find, current_text, current_date);
                 textFieldFoodName.text = ""
-                textFieldFoodName.focus = false
+                textFieldFoodName.focus = true
             }
             else {
                 var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
@@ -43,7 +43,7 @@ Item {
         else {
             foodList.addItem(current_text, "", current_date);
             textFieldFoodName.text = ""
-            textFieldFoodName.focus = false
+            textFieldFoodName.focus = true
         }
     }
 
@@ -155,4 +155,13 @@ Item {
         }
     }
 
+    Connections {
+        target: mainView
+        onRefreshAll: {
+            if(swapView.currentIndex == 2) {
+                console.debug("Updating AddItemScreen")
+                textFieldFoodName.focus = true
+            }
+        }
+    }
 }

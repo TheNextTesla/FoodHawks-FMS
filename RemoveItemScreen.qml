@@ -284,4 +284,14 @@ Item {
             id: removeListModel
         }
     }
+
+    Connections {
+        target: mainView
+        onRefreshAll: {
+            if(swapView.currentIndex == 3) {
+                console.debug("Updating RemoveItemScreen")
+                textFieldFoodNameSearch.focus = true
+            }
+        }
+    }
 }
