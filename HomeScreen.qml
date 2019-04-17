@@ -154,7 +154,40 @@ Item {
         text: "🍲"
         font.pointSize: 21
         onClicked: {
-            //TODO: Implement Recipe Suggestion
+            var url_recipe_search = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/findByIngredients?number=1&limitLicense=true&ranking=1&ignorePantry=false&ingredients="
+            var food_item_names = foodList.getFoodItemNames()
+            var food_item_colors = foodList.getFoodItemColors()
+
+            var index = 0
+            for(index = 0; index < food_item_names.length; index++) {
+                if(index < food_item_colors.length && food_item_colors[index] === "Red") {
+                    var orig_string = food_item_names[index]
+                    var comma_string = orig_string.replace(/,/g, '%2C')
+                    var html_string = comma_string.replace(/ /g, '+')
+                    url_recipe_search += html_string + "%2C"
+                }
+            }
+            url_recipe_search = url_recipe_search.substring(0, url_recipe_search.length - 3)
+
+            var headers = ["X-RapidAPI-Host", "X-RapidAPI-Key"]
+            var header_vals = ["spoonacular-recipe-food-nutrition-v1.p.rapidapi.com", "46611bcfaamsh1f155f49dd69dacp1fc022jsn02ac67384551"]
+            getData(url_recipe_search, headers, header_vals, function(api_val) {
+                var json_obj = JSON.parse(api_val)
+                var id = json_obj[0].id
+                var url_recipe_info = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/recipes/"
+                url_recipe_info += id + "/information"
+                getData(url_recipe_info, headers, header_vals, function(api_val) {
+                    var json_obj2 = JSON.parse(api_val)
+                    var result_url = json_obj2.sourceUrl
+                    var result_title = json_obj2.title
+                    var result_instruction = json_obj2.instructions
+                    var message = "Food Management System: Recommended Recipe:\n"
+                    message += result_title + "\n"
+                    message += result_instruction + "\n"
+                    message += "For More Information, See: " + result_url
+                    foodList.sendMessage(message)
+                })
+            })
         }
     }
 

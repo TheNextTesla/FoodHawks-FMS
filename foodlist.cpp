@@ -78,7 +78,7 @@ void FoodList::sendMessage(QString message_contents)
     }
     command += "\" --form-string \"message=";
     command += message_contents.toUtf8().constData();
-    command += "\" https://api.pushover.net/1/messages.json";
+    command += "\" --form-string \"html=1\" https://api.pushover.net/1/messages.json";
     qDebug() << "Command Executing " << QString::fromStdString(command);
     system(command.c_str());
 }

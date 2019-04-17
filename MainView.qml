@@ -20,16 +20,7 @@ Item {
         return /^-{0,1}\d+$/.test(value);
     }
 
-    function sleep(milliseconds) {
-      var start = new Date().getTime();
-      for (var i = 0; i < 1e7; i++) {
-        if ((new Date().getTime() - start) > milliseconds){
-          break;
-        }
-      }
-    }
-
-    function getData(url, func) {
+    function getData(url, headers, header_vals, func) {
         console.debug("call " + url)
         var xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange=function() {
@@ -38,6 +29,9 @@ Item {
             }
         }
         xmlhttp.open("GET", url, true)
+        for(var i = 0; i < headers.length; i++) {
+            xmlhttp.setRequestHeader(headers[i], header_vals[i])
+        }
         xmlhttp.send()
     }
 

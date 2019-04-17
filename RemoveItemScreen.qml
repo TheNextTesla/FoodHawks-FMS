@@ -25,7 +25,7 @@ Item {
                 var request_url = "https://api.nal.usda.gov/ndb/search/?format=json&q="
                 request_url += current_text
                 request_url += "&max=1&offset=0&api_key=BScWLcJjXHdIQVrvZNxKWhNznrdiGBI4jNdHimzU"
-                getData(request_url, function(api_val){
+                getData(request_url, [], [], function(api_val){
                     var json_obj = JSON.parse(api_val)
                     var name = json_obj.list.item[0].name
                     var itemsContaining = foodList.getFoodItemsContaining(name)
